@@ -5,13 +5,27 @@
 \chapter{Introduction}
 \label{chap:introduction}
 
-\section{Motivation}
-\label{sec:motivation}
+\section{Ldpc Codes Fundamentals and Operation} 
+\label{sec:ldpc Codes}
+
+\gls{ldpc} codes are a class of linear error-correcting codes that were first introduced by Gallager in the 1960s \cite{Gallager}. 
+They are characterized by a sparse parity-check matrix, which allows for efficient decoding algorithms. 
+\gls{ldpc} codes have gained significant attention in recent years due to their near-capacity performance and suitability for modern communication systems such as 5G \gls{nr} \cite{3gpp38212}.
 
 \section{Scope of the Thesis}
 \label{sec:scope}
 
-\section{Structure of the Thesis}
-\label{sec:structure}
+The scope of this thesis encompasses an extensive literature review focusing on sensitive decoding algorithms for \gls{ldpc} codes, highlighting the distinctions and comparative merits of hard versus soft decision decoding techniques. 
+Additionally, a detailed exploration of the x86 processor architecture will be conducted to address critical implementation considerations, specifically evaluating whether floating-point or fixed-point data types offer greater efficiency for representing soft bits. 
+Furthermore, this investigation will assess the practical utility of advanced vector instruction sets, such as \gls{avx2}, in optimizing decoding performance. 
+Central to this thesis is the development of an efficient LDPC decoder implemented in C++, emphasizing both computational efficiency and decoding sensitivity. 
+The performance of the decoder will be thoroughly evaluated through Monte Carlo simulations under conditions of an \gls{awgn} channel, focusing specifically on processing speed and sensitivity in decoding performance metrics.
+
+\section{Current State and Tools Utilized}
+\label{sec:current_state}
+
+We're currently using an open-source implementation from \gls{oai} of the \gls{ldpc} decoder which we intend to phase out. There's already an internal solution developed by another department, which we plan to leverage as our reference. 
+However, we'll need to adapt and port this solution to align specifically with our requirements. 
+To ensure the new solution meets our performance criteria, I'll utilize an existing test framework designed for evaluating processing speed and decoding sensitivity through Monte Carlo simulations conducted in an \gls{awgn} channel.
 
 \end{document}
