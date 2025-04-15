@@ -12,6 +12,7 @@
 \gls{ldpc} codes are a class of linear error-correcting codes that have become essential in modern digital communication systems \cite{3gpp38212}.
 First introduced by Robert Gallager in the early 1960s \cite{gallager62} and later rediscovered in the 1990s, \gls{ldpc} codes are now widely used due to their near-capacity performance and efficient decoding algorithms.
 
+\vspace{1em}
 \begin{figure}[htbp]
     \centering
     \resizebox{\textwidth}{!}{%
@@ -40,8 +41,9 @@ First introduced by Robert Gallager in the early 1960s \cite{gallager62} and lat
     \caption{Standard communication model including encoder, channel, and decoder.}
     \label{fig:comm_model}
 \end{figure}
+\vspace{1em}
 
-Throughout this thesis, we consider the classical digital communication model, where a message is transmitted from a sender to a receiver over a noisy channel. % transmitter (sender) tp receiver
+Throughout this thesis, we consider the classical digital communication model, where a message is transmitted from a sender to a receiver over a noisy channel.
 This process typically includes an encoder, a channel, and a decoder, as illustrated in Figure~\ref{fig:comm_model}.
 The encoder transforms the original data into a redundant codeword, which is then transmitted through the channel—often modeled as an \gls{awgn} channel or a \gls{bsc}, depending on the application.
 At the receiver side, a decoder attempts to reconstruct the original message from the noisy received signal, using redundancy to detect and correct potential errors.
@@ -60,7 +62,6 @@ This makes them highly efficient for systems where both speed and reliability ar
 \begin{enumerate}
     \item 5G Mobile Networks: Used in the physical layer for enhanced data throughput and reliability.
     \item Wi-Fi Standards (e.g., IEEE 802.11n/ac/ax): Ensures efficient wireless communication.
-    \item Satellite and Deep Space Communications: Employed by space agencies like NASA to ensure error-free data transmission across vast distances.
     \item Digital Video Broadcasting (DVB-S2, DVB-T2): Used in broadcast systems for better spectrum efficiency and signal quality.
     \item Data Storage Devices: Found in hard drives and solid-state drives for error correction in data retrieval.
 \end{enumerate}
@@ -78,7 +79,7 @@ Finally, well-designed \gls{ldpc} codes exhibit a low error floor, meaning their
 
 \subsection{Basic Principles of LDPC Codes}
 \gls{ldpc} codes are defined by sparse parity-check matrices—matrices that contain mostly zeros and only a few ones.
-The sparsity of these matrices allows for efficient decoding using iterative message-passing algorithms, such as the \gls{spa} or \gls{msa} \cite{cc09}.
+The sparsity of these matrices allows for efficient decoding using iterative message-passing algorithms, such as the \gls{spa} or \gls{msa}.
 
 \begin{figure}[h!] 
     \centering
@@ -118,9 +119,9 @@ The sparsity of these matrices allows for efficient decoding using iterative mes
     \label{fig:ldpc_tanner_graph}
 \end{figure}
 
-The basic idea is to represent the code as a bipartite graph—commonly referred to as a Tanner graph—where one set of nodes corresponds to the bits in the codeword and the other set corresponds to the parity-check equations.
+The basic idea is to represent the code as a bipartite graph—commonly referred to as a Tanner graph—where one set of nodes corresponds to the bits in the codeword (v nodes) and the other set corresponds to the parity-check equations (c nodes).
 As shown in Figure~\ref{fig:ldpc_tanner_graph}, this graphical representation provides a clear and structured way to visualize the relationships defined by the parity-check matrix.
-During decoding, messages are iteratively exchanged between variable nodes and check nodes along the edges of the graph, allowing the decoder to gradually refine its estimate of the transmitted codeword, even in the presence of noise.
+During decoding, messages are iteratively exchanged between variable nodes and check nodes along the edges of the graph, allowing the decoder to gradually refine its estimate of the transmitted codeword, even in the presence of noise \cite{cc09}.
 
 \section{Scope of the Thesis}
 \label{sec:scope}
@@ -138,7 +139,7 @@ A key focus will be on determining the optimal numerical representation for soft
 This evaluation will include a theoretical discussion, as well as empirical benchmarks to quantify the impact on decoding performance.
 
 In addition, this thesis investigates the potential of leveraging advanced \gls{simd} vector instruction sets, such as \gls{avx2}, to accelerate \gls{ldpc} decoding.
-The ability to process multiple data elements in parallel can significantly reduce decoding latency and improve throughput, making such instruction sets particularly attractive for high-performance software-based implementations.
+The ability to process multiple data elements in parallel can significantly reduce decoding latency and improve throughput, making such instruction sets particularly attractive for high-performance software-based implementations \cite{9020587}.
 
 At the core of this work lies the design and implementation of a custom LDPC decoder written in C++.
 This decoder is developed with a strong focus on computational efficiency, architectural compatibility, and decoding accuracy.
@@ -152,8 +153,7 @@ The outcomes of these experiments will provide valuable insights into the practi
 \label{sec:current_state}
 
 The starting point for this work is an existing open-source implementation of an \gls{ldpc} decoder provided by the \gls{oai} project. 
-While this implementation offers a functional baseline, it is not optimized for the specific performance and sensitivity requirements outlined in this thesis. 
-As such, the current decoder will be phased out in favor of a more tailored solution.
+While this implementation offers a functional baseline, we will be phasing it out in favor of a more tailored solution.
 
 An internal alternative already exists, developed by another department within the organization. 
 This in-house decoder implementation has demonstrated promising results in terms of performance and accuracy, and will serve as the primary reference point for the work conducted in this thesis. 
