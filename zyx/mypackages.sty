@@ -12,13 +12,10 @@
 % Conditional logic
 \usepackage{ifthen}
 % Main language settings
-\ifthenelse{\equal{\mylanguage}{de}}{%
-% Set german as main language and english as a fallback
-\usepackage[english,ngerman]{babel}
-}{%
+
 % Set english as main language and german as a fallback
 \usepackage[ngerman,english]{babel}
-}
+
 % Euro symbol support
 \usepackage{eurosym}
 % Use utf-8 encoding -> Umlaute sind direkt möglich
@@ -162,12 +159,12 @@ captionpos=b, float=htbp, xleftmargin=2em,frame=single,framexleftmargin=1.5em, b
 
 % Some language specific titles
 \ifthenelse{\equal{\mylanguage}{de}}{
-\newcommand*{\myAbstractTitle}{Zusammenfassung}
+\newcommand*{\myAbstractTitle}{Abstract}
 }{
 \newcommand*{\myAbstractTitle}{Abstract}
 }
 \ifthenelse{\equal{\mylanguage}{de}}{
-\newcommand*{\myAcknowTitle}{Danksagung}
+\newcommand*{\myAcknowTitle}{Acknowledgments}
 }{
 \newcommand*{\myAcknowTitle}{Acknowledgments}
 }
