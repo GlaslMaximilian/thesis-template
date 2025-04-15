@@ -19,7 +19,7 @@ First introduced by Robert Gallager in the early 1960s \cite{gallager62} and lat
             node distance=1.8cm and 1.5cm,
             block/.style={draw, fill=blue!20, rounded corners, minimum width=2.5cm, minimum height=1.2cm, text centered},
             channel/.style={draw, fill=gray!20, minimum width=2.5cm, minimum height=1.2cm, text centered},
-            arrow/.style={thick, ->, >=Stealth}
+            arrow/.style={thick, ->}
         ]
 
         % Nodes
@@ -41,7 +41,7 @@ First introduced by Robert Gallager in the early 1960s \cite{gallager62} and lat
     \label{fig:comm_model}
 \end{figure}
 
-Throughout this thesis, we consider the classical digital communication model, where a message is transmitted from a sender (transmitter) to a receiver over a noisy channel. % transmitter (sender) tp receiver
+Throughout this thesis, we consider the classical digital communication model, where a message is transmitted from a sender to a receiver over a noisy channel. % transmitter (sender) tp receiver
 This process typically includes an encoder, a channel, and a decoder, as illustrated in Figure~\ref{fig:comm_model}.
 The encoder transforms the original data into a redundant codeword, which is then transmitted through the channel—often modeled as an \gls{awgn} channel or a \gls{bsc}, depending on the application.
 At the receiver side, a decoder attempts to reconstruct the original message from the noisy received signal, using redundancy to detect and correct potential errors.
@@ -85,17 +85,17 @@ The sparsity of these matrices allows for efficient decoding using iterative mes
     \begin{tikzpicture}[node distance=1.5cm and 1cm]
 
         \tikzset{
-            variable/.style={circle, draw=blue!60, fill=blue!20, thick, minimum size=10mm, inner sep=0pt},
+            var/.style={circle, draw=blue!60, fill=blue!20, thick, minimum size=10mm, inner sep=0pt},
             check/.style={rectangle, draw=red!60, fill=red!20, thick, minimum size=10mm, inner sep=0pt}
         }
 
         % Variable nodes
-        \node[variable] (v1) {v$_1$};
-        \node[variable, right=of v1] (v2) {v$_2$};
-        \node[variable, right=of v2] (v3) {v$_3$};
-        \node[variable, right=of v3] (v4) {v$_4$};
-        \node[variable, right=of v4] (v5) {v$_5$};
-        \node[variable, right=of v5] (v6) {v$_6$};
+        \node[var] (v1) {v$_1$};
+        \node[var, right=of v1] (v2) {v$_2$};
+        \node[var, right=of v2] (v3) {v$_3$};
+        \node[var, right=of v3] (v4) {v$_4$};
+        \node[var, right=of v4] (v5) {v$_5$};
+        \node[var, right=of v5] (v6) {v$_6$};
 
         % Check nodes
         \node[check, below=2cm of v2] (c1) {c$_1$};
