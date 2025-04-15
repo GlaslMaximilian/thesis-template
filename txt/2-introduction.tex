@@ -1,31 +1,170 @@
 \documentclass[../main.tex]{subfiles}
-
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning} 
 \begin{document}
 
 \chapter{Introduction}
 \label{chap:introduction}
 
-\section{Ldpc Codes Fundamentals and Operation} 
+\section{LDPC Codes Fundamentals and Operation} 
 \label{sec:ldpc Codes}
 
-\gls{ldpc} codes are a class of linear error-correcting codes that were first introduced by Gallager in the 1960s \cite{Gallager}. 
-They are characterized by a sparse parity-check matrix, which allows for efficient decoding algorithms. 
-\gls{ldpc} codes have gained significant attention in recent years due to their near-capacity performance and suitability for modern communication systems such as 5G \gls{nr} \cite{3gpp38212}.
+\gls{ldpc} codes are a class of linear error-correcting codes that have become essential in modern digital communication systems \cite{3gpp38212}.
+First introduced by Robert Gallager in the early 1960s \cite{gallager62} and later rediscovered in the 1990s, \gls{ldpc} codes are now widely used due to their near-capacity performance and efficient decoding algorithms.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tikzpicture}[
+            node distance=1.8cm and 1.5cm,
+            block/.style={draw, fill=blue!20, rounded corners, minimum width=2.5cm, minimum height=1.2cm, text centered},
+            channel/.style={draw, fill=gray!20, minimum width=2.5cm, minimum height=1.2cm, text centered},
+            arrow/.style={thick, ->, >=Stealth}
+        ]
+
+        % Nodes
+        \node (input) {Message Bits};
+        \node[block, right=of input] (encoder) {LDPC Encoder};
+        \node[channel, right=of encoder] (channel) {Channel (e.g., AWGN)};
+        \node[block, right=of channel] (decoder) {LDPC Decoder};
+        \node[right=of decoder] (output) {Decoded Bits};
+
+        % Arrows
+        \draw[arrow] (input) -- (encoder);
+        \draw[arrow] (encoder) -- (channel);
+        \draw[arrow] (channel) -- (decoder);
+        \draw[arrow] (decoder) -- (output);
+
+        \end{tikzpicture}%
+    }
+    \caption{Standard communication model including encoder, channel, and decoder.}
+    \label{fig:comm_model}
+\end{figure}
+
+Throughout this thesis, we consider the classical digital communication model, where a message is transmitted from a sender (transmitter) to a receiver over a noisy channel. % transmitter (sender) tp receiver
+This process typically includes an encoder, a channel, and a decoder, as illustrated in Figure~\ref{fig:comm_model}.
+The encoder transforms the original data into a redundant codeword, which is then transmitted through the channel—often modeled as an \gls{awgn} channel or a \gls{bsc}, depending on the application.
+At the receiver side, a decoder attempts to reconstruct the original message from the noisy received signal, using redundancy to detect and correct potential errors.
+
+In practical systems, this model applies to both downstream (e.g., from a base station to a user device) and upstream (e.g., from a user device to the network) communication paths.
+These are typically affected by different types of noise, interference, and channel impairments, making robust error correction mechanisms crucial for maintaining reliable data transmission.
+
+\subsection{Importance of LDPC Codes}
+In any digital communication system, data transmitted over a channel is vulnerable to noise, interference, and other impairments that can introduce errors. 
+Error-correcting codes are designed to detect and correct these errors without requiring retransmission. 
+\gls{ldpc} codes are particularly significant because they offer performance that comes very close to the Shannon limit, the theoretical maximum efficiency of data transmission over a noisy channel \cite{shannon1948}. 
+This makes them highly efficient for systems where both speed and reliability are critical.
+
+\subsection{Area of use} %TODO: maybe don't use list here, but rather a paragraph
+\gls{ldpc} codes are now implemented in a wide range of real-world applications, particularly those demanding high data rates and robust error correction. Examples include:
+\begin{enumerate}
+    \item 5G Mobile Networks: Used in the physical layer for enhanced data throughput and reliability.
+    \item Wi-Fi Standards (e.g., IEEE 802.11n/ac/ax): Ensures efficient wireless communication.
+    \item Satellite and Deep Space Communications: Employed by space agencies like NASA to ensure error-free data transmission across vast distances.
+    \item Digital Video Broadcasting (DVB-S2, DVB-T2): Used in broadcast systems for better spectrum efficiency and signal quality.
+    \item Data Storage Devices: Found in hard drives and solid-state drives for error correction in data retrieval.
+\end{enumerate}
+
+\subsection{Advantages of using LDPC Codes}
+\gls{ldpc} codes offer several advantages over traditional error-correcting codes such as Turbo codes and Reed-Solomon codes, making them a preferred choice in many modern communication systems. 
+One of their most important properties is their near-capacity performance. They operate remarkably close to the Shannon limit across a variety of channel conditions. 
+This allows for highly efficient use of bandwidth without sacrificing reliability.
+
+Another key advantage is their scalability. % maybe insert comma instead of new sentence ? 
+\gls{ldpc} codes can be designed with different block lengths and code rates, allowing them to be tailored for specific system requirements, whether it's high-throughput wireless communication or low-power embedded systems. 
+Additionally, \gls{ldpc} codes are decoded using efficient iterative algorithms, such as \gls{bp}, which are highly parallelizable and well-suited for hardware acceleration. This makes them attractive for practical implementation in systems where decoding speed is critical.
+
+Finally, well-designed \gls{ldpc} codes exhibit a low error floor, meaning their error rate does not plateau at high \gls{snr} as it does for some other codes. This characteristic ensures robust long-term performance, especially in high-reliability applications.
+
+\subsection{Basic Principles of LDPC Codes}
+\gls{ldpc} codes are defined by sparse parity-check matrices—matrices that contain mostly zeros and only a few ones.
+The sparsity of these matrices allows for efficient decoding using iterative message-passing algorithms, such as the \gls{spa} or \gls{msa} \cite{cc09}.
+
+\begin{figure}[h!] 
+    \centering
+    \begin{tikzpicture}[node distance=1.5cm and 1cm]
+
+        \tikzset{
+            variable/.style={circle, draw=blue!60, fill=blue!20, thick, minimum size=10mm, inner sep=0pt},
+            check/.style={rectangle, draw=red!60, fill=red!20, thick, minimum size=10mm, inner sep=0pt}
+        }
+
+        % Variable nodes
+        \node[variable] (v1) {v$_1$};
+        \node[variable, right=of v1] (v2) {v$_2$};
+        \node[variable, right=of v2] (v3) {v$_3$};
+        \node[variable, right=of v3] (v4) {v$_4$};
+        \node[variable, right=of v4] (v5) {v$_5$};
+        \node[variable, right=of v5] (v6) {v$_6$};
+
+        % Check nodes
+        \node[check, below=2cm of v2] (c1) {c$_1$};
+        \node[check, right=of c1] (c2) {c$_2$};
+        \node[check, right=of c2] (c3) {c$_3$};
+
+        % Edges 
+        \draw (v1) -- (c1);
+        \draw (v2) -- (c1);
+        \draw (v2) -- (c2);
+        \draw (v3) -- (c1);
+        \draw (v3) -- (c2);
+        \draw (v4) -- (c2);
+        \draw (v4) -- (c3);
+        \draw (v5) -- (c3);
+        \draw (v6) -- (c3);
+
+    \end{tikzpicture}
+    \caption{Bipartite Tanner graph representation of an LDPC code.} 
+    \label{fig:ldpc_tanner_graph}
+\end{figure}
+
+The basic idea is to represent the code as a bipartite graph—commonly referred to as a Tanner graph—where one set of nodes corresponds to the bits in the codeword and the other set corresponds to the parity-check equations.
+As shown in Figure~\ref{fig:ldpc_tanner_graph}, this graphical representation provides a clear and structured way to visualize the relationships defined by the parity-check matrix.
+During decoding, messages are iteratively exchanged between variable nodes and check nodes along the edges of the graph, allowing the decoder to gradually refine its estimate of the transmitted codeword, even in the presence of noise.
 
 \section{Scope of the Thesis}
 \label{sec:scope}
 
-The scope of this thesis encompasses an extensive literature review focusing on sensitive decoding algorithms for \gls{ldpc} codes, highlighting the distinctions and comparative merits of hard versus soft decision decoding techniques. 
-Additionally, a detailed exploration of the x86 processor architecture will be conducted to address critical implementation considerations, specifically evaluating whether floating-point or fixed-point data types offer greater efficiency for representing soft bits. 
-Furthermore, this investigation will assess the practical utility of advanced vector instruction sets, such as \gls{avx2}, in optimizing decoding performance. 
-Central to this thesis is the development of an efficient LDPC decoder implemented in C++, emphasizing both computational efficiency and decoding sensitivity. 
-The performance of the decoder will be thoroughly evaluated through Monte Carlo simulations under conditions of an \gls{awgn} channel, focusing specifically on processing speed and sensitivity in decoding performance metrics.
+The scope of this thesis encompasses a comprehensive investigation into the efficient implementation of \gls{ldpc} decoding algorithms, with particular emphasis on decoding sensitivity and computational performance.
+The study begins with an extensive literature review that critically examines existing decoding strategies, distinguishing between things such as hard decision and soft decision decoding techniques.
+This review will not only highlight the theoretical underpinnings of each method but also provide a comparative analysis of their practical trade-offs in terms of complexity, accuracy, and implementation feasibility.
+
+As part of the implementation phase, multiple soft-decision decoding algorithms will be examined and evaluated, including the \gls{spa} and \gls{msa}.
+These algorithms represent a spectrum of approaches that balance decoding performance against computational cost, and their inclusion allows for a detailed comparison of sensitivity, convergence behavior, and resource efficiency.
+By analyzing the performance of each algorithm under identical simulation conditions, this thesis aims to identify decoding strategies that offer optimal trade-offs for practical deployment, particularly when implemented on general-purpose hardware.
+
+To ground the investigation in a realistic computational context, a detailed exploration of the x86 processor architecture is conducted, with particular attention paid to the implications for implementing soft-input decoding algorithms.
+A key focus will be on determining the optimal numerical representation for soft bits, specifically evaluating whether floating-point or fixed-point arithmetic delivers better efficiency and accuracy in practice.
+This evaluation will include a theoretical discussion, as well as empirical benchmarks to quantify the impact on decoding performance.
+
+In addition, this thesis investigates the potential of leveraging advanced \gls{simd} vector instruction sets, such as \gls{avx2}, to accelerate \gls{ldpc} decoding.
+The ability to process multiple data elements in parallel can significantly reduce decoding latency and improve throughput, making such instruction sets particularly attractive for high-performance software-based implementations.
+
+At the core of this work lies the design and implementation of a custom LDPC decoder written in C++.
+This decoder is developed with a strong focus on computational efficiency, architectural compatibility, and decoding accuracy.
+Through targeted optimizations and low-level performance tuning, the goal is to create a decoder that is not only fast but also capable of maintaining high sensitivity in soft-decision decoding scenarios.
+
+The final stage of the thesis involves an in-depth performance evaluation using Monte Carlo simulations over an \gls{awgn} channel.
+These simulations will assess the decoders behavior under various noise levels, focusing on key performance metrics such as \gls{ber}, \gls{fer}, decoding speed, and sensitivity to channel variations.
+The outcomes of these experiments will provide valuable insights into the practical viability of the proposed decoding architecture.
 
 \section{Current State and Tools Utilized}
 \label{sec:current_state}
 
-We're currently using an open-source implementation from \gls{oai} of the \gls{ldpc} decoder which we intend to phase out. There's already an internal solution developed by another department, which we plan to leverage as our reference. 
-However, we'll need to adapt and port this solution to align specifically with our requirements. 
-To ensure the new solution meets our performance criteria, I'll utilize an existing test framework designed for evaluating processing speed and decoding sensitivity through Monte Carlo simulations conducted in an \gls{awgn} channel.
+The starting point for this work is an existing open-source implementation of an \gls{ldpc} decoder provided by the \gls{oai} project. 
+While this implementation offers a functional baseline, it is not optimized for the specific performance and sensitivity requirements outlined in this thesis. 
+As such, the current decoder will be phased out in favor of a more tailored solution.
+
+An internal alternative already exists, developed by another department within the organization. 
+This in-house decoder implementation has demonstrated promising results in terms of performance and accuracy, and will serve as the primary reference point for the work conducted in this thesis. 
+However, the decoder in its current form is not directly compatible with the architecture and design goals pursued here. 
+Consequently, substantial adaptation and refactoring will be necessary to port the internal solution into a form that is optimized for both the target system and the decoding strategies under evaluation.
+
+To support this development and ensure robust benchmarking, an existing test framework will be employed. 
+This framework is specifically designed to evaluate decoder performance using Monte Carlo simulations, enabling detailed assessment under controlled and repeatable conditions. 
+It facilitates precise measurement of key performance metrics, including processing speed, throughput, and decoding sensitivity, particularly within the context of an \gls{awgn} channel model. 
+By leveraging this framework, the effectiveness of various decoding algorithms and implementation techniques can be rigorously validated throughout the development process.
+
+This setup provides a strong foundation for systematically comparing multiple decoding approaches and architectural optimizations, ensuring that the final implementation is not only functionally correct but also meets the high-performance demands of real-world communication systems.
 
 \end{document}

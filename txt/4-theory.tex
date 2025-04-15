@@ -6,38 +6,38 @@
 
 % ########## ENCODING ##########
 \section{LDPC Encoding}
-The encoding process of LDPC codes involves the multiplication of a message vector by a generator matrix.
-The generator matrix is derived from the parity-check matrix, which defines the code.
-The encoding process can be represented mathematically as follows:
-\begin{equation}
-    \mathbf{c} = \mathbf{m} \cdot \mathbf{G}^T
-\end{equation}
-where \(\mathbf{c}\) is the codeword, \(\mathbf{m}\) is the message vector, and \(\mathbf{G}\) is the generator matrix.
-The generator matrix is constructed from the parity-check matrix \(\mathbf{H}\) using the following relationship:
-\begin{equation}
-    \mathbf{G} = [\mathbf{I} | \mathbf{P}]
-\end{equation}
-where \(\mathbf{I}\) is the identity matrix and \(\mathbf{P}\) is a matrix that satisfies the equation \(\mathbf{H} \cdot \mathbf{G}^T = 0\).
-The encoding process can be performed using various algorithms, such as the sum-product algorithm or the belief propagation algorithm \cite{Channel_Codes}.
+%The encoding process of LDPC codes involves the multiplication of a message vector by a generator matrix.
+%The generator matrix is derived from the parity-check matrix, which defines the code.
+%The encoding process can be represented mathematically as follows:
+%\begin{equation}
+%    \mathbf{c} = \mathbf{m} \cdot \mathbf{G}^T
+%\end{equation}
+%where \(\mathbf{c}\) is the codeword, \(\mathbf{m}\) is the message vector, and \(\mathbf{G}\) is the generator matrix.
+%The generator matrix is constructed from the parity-check matrix \(\mathbf{H}\) using the following relationship:
+%\begin{equation}
+%    \mathbf{G} = [\mathbf{I} | \mathbf{P}]
+%\end{equation}
+%where \(\mathbf{I}\) is the identity matrix and \(\mathbf{P}\) is a matrix that satisfies the equation \(\mathbf{H} \cdot \mathbf{G}^T = 0\).
+%The encoding process can be performed using various algorithms, such as the sum-product algorithm or the belief propagation algorithm \cite{cc09}.
 
 % ########## DECODING ##########
 \section{LDPC Decoding Process}
-The decoding process of LDPC codes is typically performed using iterative algorithms such as the sum-product algorithm or the belief propagation algorithm.
-These algorithms operate on the bipartite graph representation of the LDPC code, where variable nodes represent the code bits and check nodes represent the parity-check equations.
-The decoding process can be summarized as follows:
-\begin{enumerate}
-    \item Initialize the variable nodes with the received soft values.
-    \item For each check node, compute the messages to the variable nodes based on the incoming messages from other check nodes.
-    \item For each variable node, update its value based on the incoming messages from the check nodes.
-    \item Repeat steps 2 and 3 until convergence or a maximum number of iterations is reached.
-    \item Check if the decoded codeword satisfies the parity-check equations.
-\end{enumerate}
-The decoding process can be represented mathematically as follows:
-\begin{equation}
-    \mathbf{c} = \text{argmax}_{\mathbf{c}} \left( \sum_{i=1}^{N} \log P(y_i | c_i) + \sum_{j=1}^{M} \log P(c_j | c_{N_j}) \right)
-\end{equation}
-where \(P(y_i | c_i)\) is the likelihood of the received symbol given the transmitted codeword, and \(P(c_j | c_{N_j})\) is the likelihood of the check node given the neighboring variable nodes.
-The decoding process continues until either a valid codeword is found or the maximum number of iterations is reached \cite{Channel_Codes}.
+%The decoding process of LDPC codes is typically performed using iterative algorithms such as the sum-product algorithm or the belief propagation algorithm.
+%These algorithms operate on the bipartite graph representation of the LDPC code, where variable nodes represent the code bits and check nodes represent the parity-check equations.
+%The decoding process can be summarized as follows:
+%\begin{enumerate}
+%    \item Initialize the variable nodes with the received soft values.
+%    \item For each check node, compute the messages to the variable nodes based on the incoming messages from other check nodes.
+%    \item For each variable node, update its value based on the incoming messages from the check nodes.
+%    \item Repeat steps 2 and 3 until convergence or a maximum number of iterations is reached.
+%    \item Check if the decoded codeword satisfies the parity-check equations.
+%\end{enumerate}
+%The decoding process can be represented mathematically as follows:
+%\begin{equation}
+%    \mathbf{c} = \text{argmax}_{\mathbf{c}} \left( \sum_{i=1}^{N} \log P(y_i | c_i) + \sum_{j=1}^{M} \log P(c_j | c_{N_j}) \right)
+%\end{equation}
+%where \(P(y_i | c_i)\) is the likelihood of the received symbol given the transmitted codeword, and \(P(c_j | c_{N_j})\) is the likelihood of the check node given the neighboring variable nodes.
+%The decoding process continues until either a valid codeword is found or the maximum number of iterations is reached \cite{cc09}.
 
 \section{Overview Decoding Algorithms}
 \label{sec:decoding_algorithms}

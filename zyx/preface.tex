@@ -53,32 +53,32 @@
 
 \frontmatter{}
 %% Begin of the declaration page
-\hypersetup{pageanchor=true}
-\thispagestyle{empty}
-\phantom{.}
-\vfill
-{\setlength{\parindent}{0cm}%
- \ifthenelse{\equal{\mylanguage}{de}}{%
-  \begin{otherlanguage}{ngerman}
-   Hiermit erkläre ich, dass ich die {\myThesisTypeShort} selbständig verfasst, noch nicht anderweitig
-für Prüfungszwecke vorgelegt, keine anderen als die angegebenen Quellen oder Hilfsmittel
-benutzt sowie wörtliche und sinngemäße Zitate als solche gekennzeichnet habe.\\[7em]
-   \myCity, den \myHandIn \hfill \myAuthor
-  \end{otherlanguage}
- }{%
-  I confirm that this \MakeLowercase{\myThesisTypeShort} is my own work and I have documented all sources and material used.\\[7em]
-  \myCity, \myHandIn \hfill \myAuthor
- }
-}
-\vspace{3em}
+%\hypersetup{pageanchor=true}
+%\thispagestyle{empty}
+%\phantom{.}
+%\vfill
+%{\setlength{\parindent}{0cm}%
+% \ifthenelse{\equal{\mylanguage}{de}}{%
+%  \begin{otherlanguage}{ngerman}
+%   Hiermit erkläre ich, dass ich die {\myThesisTypeShort} selbständig verfasst, noch nicht anderweitig
+%für Prüfungszwecke vorgelegt, keine anderen als die angegebenen Quellen oder Hilfsmittel
+%benutzt sowie wörtliche und sinngemäße Zitate als solche gekennzeichnet habe.\\[7em]
+%   \myCity, den \myHandIn \hfill \myAuthor
+%  \end{otherlanguage}
+% }{%
+%  I confirm that this \MakeLowercase{\myThesisTypeShort} is my own work and I have documented all sources and material used.\\[7em]
+%  \myCity, \myHandIn \hfill \myAuthor
+% }
+%}
+%\vspace{3em}
 %% End of the declaration Page
 \cleardoublepage
 
-\IfFileExists{../txt/0-acknowledgments.tex}{
- \currentpdfbookmark{\myAcknowTitle}{acknowledgments}
- \subfile{../txt/0-acknowledgments.tex}
- \cleardoublepage
-}{}
+%\IfFileExists{../txt/0-acknowledgments.tex}{
+% \currentpdfbookmark{\myAcknowTitle}{acknowledgments}
+% \subfile{../txt/0-acknowledgments.tex}
+% \cleardoublepage
+%}{}
 }
 
 %% Adding author name and thesis title in the header of the first page in wip mode
@@ -89,13 +89,13 @@ benutzt sowie wörtliche und sinngemäße Zitate als solche gekennzeichnet habe.
  \ohead{\myThesisType \\[0.2em] \myTitle \vspace{-1.5em}}
 }{}
 
-\begingroup
-% Temporarily overwriting clearpage command
-\let\cleardoublepage\relax
-\let\clearpage\relax
-\currentpdfbookmark{\myAbstractTitle}{abstract}
-\subfile{../txt/0-abstract.tex}
-\endgroup
+%\begingroup
+%% Temporarily overwriting clearpage command
+%\let\cleardoublepage\relax
+%\let\clearpage\relax
+%\currentpdfbookmark{\myAbstractTitle}{abstract}
+%\subfile{../txt/0-abstract.tex}
+%\endgroup
 
 \microtypesetup{protrusion=false}
 \cleardoublepage
@@ -104,7 +104,7 @@ benutzt sowie wörtliche und sinngemäße Zitate als solche gekennzeichnet habe.
  \renewcommand*{\chapterpagestyle}{plain}
 }{}
 \ifthenelse{\equal{\mylanguage}{de}}{
- \currentpdfbookmark{contents}{contents}
+ \currentpdfbookmark{Contents}{contents}
 }{
  \currentpdfbookmark{Contents}{contents}
 }
