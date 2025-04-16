@@ -48,7 +48,7 @@ This process typically includes an encoder, a channel, and a decoder, as illustr
 The encoder transforms the original data into a redundant codeword, which is then transmitted through the channel—often modeled as an \gls{awgn} channel or a \gls{bsc}, depending on the application.
 At the receiver side, a decoder attempts to reconstruct the original message from the noisy received signal, using redundancy to detect and correct potential errors.
 
-In practical systems, this model applies to both downstream (e.g., from a base station to a user device) and upstream (e.g., from a user device to the network) communication paths.
+In practical systems, this model applies to both downlink (e.g., from a base station to a user device) and uplink (e.g., from a user device to the network) communication paths.
 These are typically affected by different types of noise, interference, and channel impairments, making robust error correction mechanisms crucial for maintaining reliable data transmission.
 
 \subsection{Importance of LDPC Codes}
@@ -72,7 +72,7 @@ One of their most important properties is their near-capacity performance. They 
 This allows for highly efficient use of bandwidth without sacrificing reliability.
 
 Another key advantage is their scalability. % maybe insert comma instead of new sentence ? 
-\gls{ldpc} codes can be designed with different block lengths and code rates, allowing them to be tailored for specific system requirements, whether it's high-throughput wireless communication or low-power embedded systems. 
+\gls{ldpc} codes can be designed with different block lengths and code rates, allowing them to be tailored for specific system requirements, whether it is high-throughput wireless communication or low-power embedded systems. 
 Additionally, \gls{ldpc} codes are decoded using efficient iterative algorithms, such as \gls{bp}, which are highly parallelizable and well-suited for hardware acceleration. This makes them attractive for practical implementation in systems where decoding speed is critical.
 
 Finally, well-designed \gls{ldpc} codes exhibit a low error floor, meaning their error rate does not plateau at high \gls{snr} as it does for some other codes. This characteristic ensures robust long-term performance, especially in high-reliability applications.
@@ -153,8 +153,7 @@ The outcomes of these experiments will provide valuable insights into the practi
 \label{sec:current_state}
 
 The starting point for this work is an existing open-source implementation of an \gls{ldpc} decoder provided by the \gls{oai} project. 
-While this implementation offers a functional baseline, we will be phasing it out in favor of a more tailored solution.
-
+While this implementation offers a functional baseline, we consider to replace it with a more tailored solution.
 An internal alternative already exists, developed by another department within the organization. 
 This in-house decoder implementation has demonstrated promising results in terms of performance and accuracy, and will serve as the primary reference point for the work conducted in this thesis. 
 However, the decoder in its current form is not directly compatible with the architecture and design goals pursued here. 
