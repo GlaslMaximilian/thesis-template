@@ -1,0 +1,51 @@
+% Sources:
+%       Kschischang et al., Factor Graphs and the Sum-Product Algorithm, IEEE TIT, 2001.
+
+\subsection{Sum-Product Algorithm}
+The Sum-Product Algorithm (also called belief propagation) operates by iteratively exchanging messages between variable and check nodes.
+Messages are expressed as LLRs, representing beliefs about the value of each bit.
+
+Initialization:
+each variable node $v_i$ sends its channel LLR $\lambda_i$ to all connected check nodes.
+
+Iterative Message Passing:
+Let:
+\begin{itemize}
+    \item $m_{i \to j}$: message from variable node $i$ to check node $j$.
+    \item $m_{j \to i}$: message from check node $j$ to variable node $i$.
+    \item $\mathbb{N}_j$: neighbors of node $i$.
+\end{itemize}
+
+(a) Variable Node Update:
+Each variable node sends to check node $j$:
+$$m_{i \to j} = \lambda_i + \sum_{j' \in \mathcal{N}(i) \setminus j} m_{j' \to i}$$
+
+Here, the node aggregates all messages from neighboring check nodes except $j$, combining them with the channel information.
+
+(b) Check Node Update:
+Each check node sends to variable node $i$:
+$$m_{j \to i} = 2 \tanh^{-1} \left( \prod_{i' \in \mathcal{N}(j) \setminus i} \tanh\left( \frac{m_{i' \to j}}{2} \right) \right)$$
+
+This step enforces parity constraints by combining the incoming beliefs from all other connected variable nodes. 
+The hyperbolic tangent function emerges from the exact inference in tree-structured graphs and operates in the LLR domain.
+
+This uses the identity:
+$$\tanh^{-1}(x) = \frac{1}{2} \log \left( \frac{1 + x}{1 - x} \right)$$
+
+Final Decision:
+After a fixed number of iterations or convergence, the final LLR for each variable node is computed as:
+$$L_i = \lambda_i + \sum_{j \in \mathcal{N}(i)} m_{j \to i}$$
+
+A hard decision is made based on the sign of $L_i$:
+$$
+\hat{x}_i =
+\begin{cases}
+0 & \text{if } L_i \geq 0 \\
+1 & \text{if } L_i < 0
+\end{cases}
+$$
+
+Finally, the estimated codeword $\hat{x}$ is checked against the parity-check condition:
+$$H \cdot \hat{x}^T = 0 (mod 2)$$
+
+If this condition is satisfied, decoding is successful.

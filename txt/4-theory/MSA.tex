@@ -1,0 +1,15 @@
+\subsection{Min-Sum Algorithm (MSA)}
+The Sum-Product Algorithm, while accurate, is computationally expensive due to the non-linear $tanh$ and $tanh^-1$ operations. 
+The Min-Sum Algorithm (MSA) approximates SPA by replacing these with simpler operations.
+
+Check Node Update:
+$$
+m_{j \to i} = \left( \prod_{i' \in \mathcal{N}(j) \setminus i} \operatorname{sign}(m_{i' \to j}) \right)
+\times \min_{i' \in \mathcal{N}(j) \setminus i} \left| m_{i' \to j} \right|
+$$
+This significantly reduces complexity but tends to overestimate the magnitudes of LLRs, which can degrade performance.
+
+Variable Node UPdate:
+$$
+m_{i \to j} = \lambda_i + \sum_{j' \in \mathcal{N}(i) \setminus j} m_{j' \to i}
+$$

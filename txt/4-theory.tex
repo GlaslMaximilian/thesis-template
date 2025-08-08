@@ -3,43 +3,53 @@
 \begin{document}
 
 \chapter{LDPC Codes: Theory and Applications}
+% Sources: 
+%       Gallager, R. G. (1962). Low-Density Parity-Check Codes. IRE Transactions on Information Theory, 8(1), 21–28. DOI:10.1109/TIT.1962.1057683
+An LDPC code is a linear block code defined by a sparse binary parity-check matrix $H \in \mathbb{F}_2^{m \times n}$, where:
+\begin{itemize}
+    \item $n$: length of the codeword
+    \item $m$: number of parity-check equations
+    \item $\mathbb{F}_2$: the finite field with two elements {0, 1}.
+\end{itemize}
+
+A vector $c \in \mathbb{F}_2^{n}$ is a valid codeword if and only if:
+$$ H \cdot c^T = 0 mod 2 $$
+
+This condition implies that every codeword lies in the null space (kernel) of $H$, over GF(2). Since $H$ has rank  $r \leq m$, the dimension of the code is $k = n - rank(H)$, and the code rate is:
+$$R = \frac{k}{n} = 1 - \frac{rank(H)}{n}$$
 
 % ########## ENCODING ##########
+% Sources:
+%       Richardson, T., & Urbanke, R. (2008). Modern Coding Theory. Cambridge University Press. (Chapter 4)
 \section{LDPC Encoding}
-%The encoding process of LDPC codes involves the multiplication of a message vector by a generator matrix.
-%The generator matrix is derived from the parity-check matrix, which defines the code.
-%The encoding process can be represented mathematically as follows:
-%\begin{equation}
-%    \mathbf{c} = \mathbf{m} \cdot \mathbf{G}^T
-%\end{equation}
-%where \(\mathbf{c}\) is the codeword, \(\mathbf{m}\) is the message vector, and \(\mathbf{G}\) is the generator matrix.
-%The generator matrix is constructed from the parity-check matrix \(\mathbf{H}\) using the following relationship:
-%\begin{equation}
-%    \mathbf{G} = [\mathbf{I} | \mathbf{P}]
-%\end{equation}
-%where \(\mathbf{I}\) is the identity matrix and \(\mathbf{P}\) is a matrix that satisfies the equation \(\mathbf{H} \cdot \mathbf{G}^T = 0\).
-%The encoding process can be performed using various algorithms, such as the sum-product algorithm or the belief propagation algorithm \cite{cc09}.
+\label{sec:encoding}
+While decoding is typically based on the parity-check matrix $H$, encoding is performed using a generator matrix $G \in \mathbb{F}_2^{k \times n}$, which satisfies:
+$$G \cdot H^T = 0$$
+This ensures that any message vector $u \in \mathbb{F}_2^{k}$ is mapped to a valid codeword $c \in \mathbb{F}_2^{n}$:
+$$c = u \cdot G$$
+To construct $G$ from $H$, one common approach is to transform $H$ into systematic form using Gaussian elimination:
+$$
+H = \begin{bmatrix} P & I \end{bmatrix}
+\quad \Rightarrow \quad
+G = \begin{bmatrix} I & P^T \end{bmatrix}
+$$
+This allows the parity bits to be computed from the message bits efficiently.
 
 % ########## DECODING ##########
-\section{LDPC Decoding Process}
-%The decoding process of LDPC codes is typically performed using iterative algorithms such as the sum-product algorithm or the belief propagation algorithm.
-%These algorithms operate on the bipartite graph representation of the LDPC code, where variable nodes represent the code bits and check nodes represent the parity-check equations.
-%The decoding process can be summarized as follows:
-%\begin{enumerate}
-%    \item Initialize the variable nodes with the received soft values.
-%    \item For each check node, compute the messages to the variable nodes based on the incoming messages from other check nodes.
-%    \item For each variable node, update its value based on the incoming messages from the check nodes.
-%    \item Repeat steps 2 and 3 until convergence or a maximum number of iterations is reached.
-%    \item Check if the decoded codeword satisfies the parity-check equations.
-%\end{enumerate}
-%The decoding process can be represented mathematically as follows:
-%\begin{equation}
-%    \mathbf{c} = \text{argmax}_{\mathbf{c}} \left( \sum_{i=1}^{N} \log P(y_i | c_i) + \sum_{j=1}^{M} \log P(c_j | c_{N_j}) \right)
-%\end{equation}
-%where \(P(y_i | c_i)\) is the likelihood of the received symbol given the transmitted codeword, and \(P(c_j | c_{N_j})\) is the likelihood of the check node given the neighboring variable nodes.
-%The decoding process continues until either a valid codeword is found or the maximum number of iterations is reached \cite{cc09}.
+% Sources:
+\section{LDPC Decoding}
+\label{sec:decoding}
+LDPC decoding is typically performed using iterative algorithms on dhe code's Tanner graph, These algorithms aim to estimate the transmitted codeword by exploiting the sparsity of the parity-check matrix $H$ and the soft information received from the channel. 
+This section presents the mathematical formulation of the Sum-Product Algorithm (SPA), as well as its approximations: Min-Sum, Normalized Min-Sum, and Offset Min-Sum.
 
+% ########## DECODING ALGORITHMS ##########
 \section{Overview Decoding Algorithms}
 \label{sec:decoding_algorithms}
+
+\subfile{./4-theory/SPA.tex}
+
+\subfile {./4-theory/MSA.tex}
+
+\subfile{./4-theory/NMS-OMS.tex}
 
 \end{document}

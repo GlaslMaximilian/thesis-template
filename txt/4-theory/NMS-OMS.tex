@@ -1,0 +1,16 @@
+\subsection{Normalized and Offset Min-Sum}
+% Sources: 
+%       Chen & Fossorier (2002). Near Optimum Belief Propagation Based Decoding, IEEE Comms.
+To compensate for Min-Sum's overestimation:
+
+Normalized Min-Sum:
+$$
+m_{j \to i} = \alpha \cdot \left( \prod \text{signs} \right) \cdot \min \left| m_{i' \to j} \right|
+$$
+Where $\alpha \in (0,1]$ is a normalization factor (e.g., 075).
+
+Offset Min-Sum:
+$$
+m_{j \to i} = \left( \prod \text{signs} \right) \cdot \max \left( \min \left| m_{i' \to j} \right| - \beta, 0 \right)
+$$
+Where $\beta$ is a small offset constant to reduce overestimation.
