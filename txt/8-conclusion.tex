@@ -5,7 +5,40 @@
 \chapter{Future Work and Conclusion}
 \label{chap:conclusion}
 
-\section{Summary of Findings}
-\label{sec:summary}
+\section*{Summary of Contributions}
+This thesis presented the design and implementation of a \emph{core} LDPC decoder with soft-input capability. In contrast to a lab reference that operated on hard decisions, the proposed decoder processes log-likelihood ratios (LLRs) and supports four decoding algorithms: \textbf{SPA}, \textbf{MS}, \textbf{OMS}, and \textbf{NMS}. The work focused on the decoder kernel itself; other chain components---\emph{reverse scrambling}, \emph{inverse rate matching}, and \emph{CRC checking}---were treated as external modules.
+
+Architecturally, the decoder employs iterative message passing on the Tanner graph with a layered schedule to accelerate convergence. Particular attention was paid to numerical stability in the soft domain and to a modular design of variable-node (VN) and check-node (CN) processing with compact edge message buffers.
+
+\section*{Experimental Findings}
+Performance was evaluated via Monte Carlo simulation on an AWGN channel over an $E_b/N_0$ sweep from $-6$ to $-4$~dB using BLER as the primary metric. The main observations are:
+\begin{itemize}
+  \item \textbf{SPA} achieves the best error-correction performance but has the highest computational cost.
+  \item \textbf{MS} is computationally light and fastest per iteration, but with a clear BLER penalty.
+  \item \textbf{OMS} and \textbf{NMS} strike a favorable balance: near-SPA BLER with small additional cost over MS (offset or scaling in CN updates).
+\end{itemize}
+Overall, OMS/NMS provide a pragmatic trade-off for many deployment scenarios.
+
+\section*{Current Limitations}
+While the core decoder is functional and its behavior is well-characterized, the implementation is \emph{not yet} ready to replace the existing production decoder. Key reasons include:
+\begin{itemize}
+  \item Missing integration with the full decoding chain (reverse scrambling, inverse rate matching, CRC-driven early stopping).
+  \item Throughput and latency not yet optimized to production targets.
+  \item Lack of fixed-point/quantized variants and comprehensive conformance tests across all target configurations.
+\end{itemize}
+
+\section*{Outlook and Next Steps}
+With targeted engineering, the implementation can mature into a production-ready component. The following steps are recommended:
+\begin{itemize}
+  \item \textbf{Vectorization and low-level optimization:} Introduce wide-SIMD parallelism via \textbf{AVX2} (e.g., intrinsics or guided auto-vectorization), ensure 32/64-byte alignment, adopt SoA layouts for message buffers, and favor branchless CN/VN kernels. Consider thread-level parallelism (OpenMP/TBB) across layers/codeblocks.
+  \item \textbf{Quantization path:} Add fixed-point support (e.g., scaled/offset min-sum with clipping), tune OMS offsets / NMS scaling per quantization, and validate against floating-point baselines.
+  \item \textbf{Chain integration:} Implement and validate reverse scrambling, inverse rate matching, and CRC checks; enable CRC-driven early termination and zero-syndrome shortcuts.
+  \item \textbf{Algorithmic tuning:} Sweep OMS offset and NMS normalization across SNRs and code structures; evaluate hybrid schedules and damping to improve stability at low SNR.
+  \item \textbf{Verification and robustness:} Expand unit/propagation tests, add deterministic seeds for Monte Carlo, and build regression suites covering multiple base graphs and lifting factors.
+\end{itemize}
+
+\noindent In summary, this thesis delivered a modular soft-input LDPC decoder with four decoding algorithms and demonstrated their performance trade-offs. Although not yet a drop-in replacement, the identified engineering steps---in particular \emph{AVX2}-based vectorization together with full-chain integration and quantization---provide a clear path toward a production-ready implementation.
+
+
 
 \end{document}

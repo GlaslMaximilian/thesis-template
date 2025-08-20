@@ -7,10 +7,11 @@ Normalized Min-Sum:
 $$
 m_{j \to i} = \alpha \cdot \left( \prod \text{signs} \right) \cdot \min \left| m_{i' \to j} \right|
 $$
-Where $\alpha \in (0,1]$ is a normalization factor (e.g., 075).
+Where $\alpha \in (0,1]$ is a normalization factor (e.g., $\alpha = 0.75$) tuned to reduce bias.
 
 Offset Min-Sum:
 $$
 m_{j \to i} = \left( \prod \text{signs} \right) \cdot \max \left( \min \left| m_{i' \to j} \right| - \beta, 0 \right)
 $$
 Where $\beta$ is a small offset constant to reduce overestimation.
+These modifications offer a trade-off between performance and complexity.

@@ -1,0 +1,203 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{3gpp38212}{report}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=49952770ed51bcb32792566644a0032e}{%
+           family={{3GPP}},
+           familyi={3\bibinitperiod}}}%
+      }
+      \strng{namehash}{49952770ed51bcb32792566644a0032e}
+      \strng{fullhash}{49952770ed51bcb32792566644a0032e}
+      \strng{fullhashraw}{49952770ed51bcb32792566644a0032e}
+      \strng{bibnamehash}{49952770ed51bcb32792566644a0032e}
+      \strng{authorbibnamehash}{49952770ed51bcb32792566644a0032e}
+      \strng{authornamehash}{49952770ed51bcb32792566644a0032e}
+      \strng{authorfullhash}{49952770ed51bcb32792566644a0032e}
+      \strng{authorfullhashraw}{49952770ed51bcb32792566644a0032e}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{10}
+      \field{number}{3GPP TS 38.212 version 16.7.0 Release 16}
+      \field{title}{Multiplexing and channel coding}
+      \field{type}{techreport}
+      \field{year}{2021}
+      \verb{urlraw}
+      \verb https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/16.07.00_60/ts_138212v160700p.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/16.07.00_60/ts_138212v160700p.pdf
+      \endverb
+    \endentry
+    \entry{gallager62}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=ea266a1e736b8a0fcc334fa98942ce0e}{%
+           family={Gallager},
+           familyi={G\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \strng{fullhash}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \strng{fullhashraw}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \strng{bibnamehash}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \strng{authorbibnamehash}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \strng{authornamehash}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \strng{authorfullhash}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \strng{authorfullhashraw}{ea266a1e736b8a0fcc334fa98942ce0e}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IRE Transactions on Information Theory}
+      \field{number}{1}
+      \field{title}{Low-density parity-check codes}
+      \field{volume}{8}
+      \field{year}{1962}
+      \field{pages}{21\bibrangedash 28}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1109/TIT.1962.1057683
+      \endverb
+      \keyw{Parity check codes;Maximum likelihood decoding;Equations;Channel capacity;Information theory;Error probability;Linear approximation;Data communication;Error correction codes;Communication systems}
+    \endentry
+    \entry{cc09}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=bd803c7ac4ca6f45f22c82940e7a3309}{%
+           family={Ryan},
+           familyi={R\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8cfea5d29f39480671d614a516710914}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Shu},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{cbc906183c30932c8d868cf24850674e}
+      \strng{fullhash}{cbc906183c30932c8d868cf24850674e}
+      \strng{fullhashraw}{cbc906183c30932c8d868cf24850674e}
+      \strng{bibnamehash}{cbc906183c30932c8d868cf24850674e}
+      \strng{authorbibnamehash}{cbc906183c30932c8d868cf24850674e}
+      \strng{authornamehash}{cbc906183c30932c8d868cf24850674e}
+      \strng{authorfullhash}{cbc906183c30932c8d868cf24850674e}
+      \strng{authorfullhashraw}{cbc906183c30932c8d868cf24850674e}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780521848688}
+      \field{journaltitle}{Channel Codes: Classical and Modern}
+      \field{month}{01}
+      \field{title}{Channel Codes Classical and Modern}
+      \field{year}{2009}
+      \verb{doi}
+      \verb 10.1017/CBO9780511803253
+      \endverb
+    \endentry
+    \entry{shannon1948}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=536c91678d1dde76c9acd47047556291}{%
+           family={Shannon},
+           familyi={S\bibinitperiod},
+           given={Claude\bibnamedelima E.},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{536c91678d1dde76c9acd47047556291}
+      \strng{fullhash}{536c91678d1dde76c9acd47047556291}
+      \strng{fullhashraw}{536c91678d1dde76c9acd47047556291}
+      \strng{bibnamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorbibnamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authornamehash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorfullhash}{536c91678d1dde76c9acd47047556291}
+      \strng{authorfullhashraw}{536c91678d1dde76c9acd47047556291}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Bell System Technical Journal}
+      \field{number}{3}
+      \field{title}{A Mathematical Theory of Communication}
+      \field{volume}{27}
+      \field{year}{1948}
+      \verb{doi}
+      \verb 10.1002/j.1538-7305.1948.tb01338.x
+      \endverb
+    \endentry
+    \entry{9020587}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=c7609922d2d0d41bda4e39b9bd864203}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Yi},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1ac3a5e8f9247f57b2e85956b9f97f9a}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Wenjin},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5e6ff28ce1afde0bd43181a220f65e42}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Zhen},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6548819078d49f5fdeaf7aff2ea9e877}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Xiqi},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8a71babd5ea7f1c5a895b698e5d69484}
+      \strng{fullhash}{17bb550cb9847031929736aada456c0a}
+      \strng{fullhashraw}{17bb550cb9847031929736aada456c0a}
+      \strng{bibnamehash}{17bb550cb9847031929736aada456c0a}
+      \strng{authorbibnamehash}{17bb550cb9847031929736aada456c0a}
+      \strng{authornamehash}{8a71babd5ea7f1c5a895b698e5d69484}
+      \strng{authorfullhash}{17bb550cb9847031929736aada456c0a}
+      \strng{authorfullhashraw}{17bb550cb9847031929736aada456c0a}
+      \field{sortinit}{X}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2019 IEEE International Workshop on Signal Processing Systems (SiPS)}
+      \field{title}{AVX-512 Based Software Decoding for 5G LDPC Codes}
+      \field{year}{2019}
+      \field{pages}{54\bibrangedash 59}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/SiPS47522.2019.9020587
+      \endverb
+      \keyw{Parity check codes;Decoding;5G mobile communication;Parallel processing;Throughput;Instruction sets;LDPC decoding;single instruction multiple data (SIMD);5G New Radio;GPP}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
