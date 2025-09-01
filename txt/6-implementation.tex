@@ -34,6 +34,8 @@ In summary, transitioning from a hard-decision reference implementation to a ful
 \section{Design and Architecture}
 \label{subsec:design_architecture}
 
+\todo{add figure of architecture}
+
 \paragraph{Scope of Implementation}
 The focus of this implementation is exclusively on the core LDPC decoder. Other components typically involved in a complete channel decoding chain---such as reverse scrambling, inverse rate matching, and CRC checking---are omitted, although they remain essential for full system-level functionality.
 
@@ -84,6 +86,8 @@ The LDPC decoder is constructed as an iterative message-passing system operating
             \item Extensible configuration allows for base graph selection, lifting factor ($Z$), and algorithm choice.
         \end{itemize}
 \end{itemize}
+
+\todo{remove some stuff mentioned in challenges}
 
 \paragraph{Summary}
 With the design and implementation of the core LDPC decoder---supporting SPA, MS, OMS, and NMS decoding algorithms, and a modular, extensible architecture---the groundwork is laid for its integration in full decoding chains. The next chapter, \emph{Experimental Results and Analysis}, will examine decoding performance and trade-offs for these algorithms under varying channel conditions, focusing on error-correction capability, computational complexity, and convergence behavior.

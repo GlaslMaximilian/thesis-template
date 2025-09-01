@@ -2,45 +2,6 @@
 
 \documentclass[../main.tex]{subfiles}
 
-% \vspace{1em}
-% \begin{figure}[!ht]
-%     \centering
-%     \begin{adjustbox}{width=0.8\textwidth}
-%     \begin{tikzpicture}[    
-%         node distance=12mm,
-%         >={Latex[length=2mm]},
-%         box/.style={draw, rounded corners, minimum height=9mm, minimum width=28mm, align=center, inner sep=3pt},
-%         main/.style={box, fill=blue!5},
-%         aux/.style={box, fill=black!5}
-%     ]
-
-%     % Nodes
-%     \node[main] (tx) {Transmitter\\(BPSK)};
-%     \node[aux, right=18mm of tx] (awgn) {AWGN Channel};
-%     \node[main, right=18mm of awgn] (ldpc) {Core LDPC\\Decoder};
-%     \node[main, right=18mm of ldpc] (out) {Hard/Soft\\Output};
-%     \node[aux, right=18mm of out] (bler) {BLER\\Evaluation};
-
-%     % Arrows
-%     \draw[->] (tx) -- (awgn);
-%     \draw[->] (awgn) -- (ldpc);
-%     \draw[->] (ldpc) -- (out);
-%     \draw[->] (out) -- (bler);
-
-%     % Annotations
-%     \node[above=3mm of awgn] (snr) {\small SNR sweep: $E_b/N_0 \in [-6,-4]$ dB};
-%     \node[below=4mm of ldpc, align=center] (algs) {\footnotesize SPA, MS, OMS, NMS};
-
-%     % Optional brace showing Monte Carlo loop scope
-%     %\node[fit=(tx)(bler), inner sep=6pt, draw=none, label=below:{\footnotesize Monte Carlo trials at each SNR point}] (scope) {};
-
-%     \end{tikzpicture}
-%     \end{adjustbox}
-% \caption{Monte Carlo simulation setup for LDPC decoder evaluation: Transmitter (BPSK) $\rightarrow$ AWGN channel $\rightarrow$ Core LDPC decoder $\rightarrow$ output (hard/soft) $\rightarrow$ BLER measurement. The decoder is tested over an $E_b/N_0$ sweep from $-6$ to $-4$ dB using SPA, MS, OMS, and NMS.}
-% \label{fig:exp_setup_ldpc}
-% \end{figure}
-% \vspace{1em}
-
 \begin{document}
 
 \chapter{Experimental Results and Analysis}
@@ -48,6 +9,45 @@
 
 \section{Experimental Setup}
 \label{sec:experimental_setup}
+
+\vspace{1em}
+\begin{figure}[!ht]
+    \centering
+    \begin{adjustbox}{width=0.8\textwidth}
+    \begin{tikzpicture}[    
+        node distance=12mm,
+        >={Latex[length=2mm]},
+        box/.style={draw, rounded corners, minimum height=9mm, minimum width=28mm, align=center, inner sep=3pt},
+        main/.style={box, fill=blue!5},
+        aux/.style={box, fill=black!5}
+    ]
+
+    % Nodes
+    \node[main] (tx) {Transmitter\\(BPSK)};
+    \node[aux, right=18mm of tx] (awgn) {AWGN Channel};
+    \node[main, right=18mm of awgn] (ldpc) {Core LDPC\\Decoder};
+    \node[main, right=18mm of ldpc] (out) {Hard/Soft\\Output};
+    \node[aux, right=18mm of out] (bler) {BLER\\Evaluation};
+
+    % Arrows
+    \draw[->] (tx) -- (awgn);
+    \draw[->] (awgn) -- (ldpc);
+    \draw[->] (ldpc) -- (out);
+    \draw[->] (out) -- (bler);
+
+    % Annotations
+    \node[above=3mm of awgn] (snr) {\small SNR sweep: $E_b/N_0 \in [-6,-4]$ dB};
+    \node[below=4mm of ldpc, align=center] (algs) {\footnotesize SPA, MS, OMS, NMS};
+
+    % Optional brace showing Monte Carlo loop scope
+    %\node[fit=(tx)(bler), inner sep=6pt, draw=none, label=below:{\footnotesize Monte Carlo trials at each SNR point}] (scope) {};
+
+    \end{tikzpicture}
+    \end{adjustbox}
+\caption{Monte Carlo simulation setup for LDPC decoder evaluation: Transmitter (BPSK) $\rightarrow$ AWGN channel $\rightarrow$ Core LDPC decoder $\rightarrow$ output (hard/soft) $\rightarrow$ BLER measurement. The decoder is tested over an $E_b/N_0$ sweep from $-6$ to $-4$ dB using SPA, MS, OMS, and NMS.}
+\label{fig:exp_setup_ldpc}
+\end{figure}
+\vspace{1em}
 
 To validate the correctness and evaluate the performance of the implemented LDPC decoder, a two-part experimental approach was adopted.
 
@@ -137,8 +137,6 @@ In summary, the graphical and quantitative analysis confirms that OMS and NMS de
 
 Further exploration of the trade-offs between decoding latency, power consumption, and error performance may guide deployment decisions in specific system architectures.
 
-
-
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=0.7\textwidth]{figs/all.png}
@@ -150,20 +148,88 @@ Further exploration of the trade-offs between decoding latency, power consumptio
 \subsection{Decoding speed and complexity.}
 \label{subsec:decoding_speed_complexity}
 
+An important metric in evaluating LDPC decoding algorithms is the decoding speed or latency, which directly impacts system throughput and real-time processing capabilities. Table~\ref{tab:decoding_speed} summarizes the measured decoding latencies at a reference signal-to-noise ratio (SNR$_\text{ref}$), along with the relative speedup of each algorithm compared to the Sum-Product Algorithm (SPA), which serves as the baseline.
 
-\section{Comparative Analysis with Existing Implementation}
-\label{sec:comparative_analysis}
-
+\begin{table}[htbp]
+\centering
+\caption{Decoding Latency and Speedup at Reference SNR}
+\label{tab:decoding_speed}
 \begin{tabular}{l r r}
 \toprule
 Algorithm & Latency@SNR$_\text{ref}$ [$\mu$s] & Speedup vs SPA \\
 \midrule
 SPA & 17915.4 & 1.00 \\
-MS  & 8228.7 & 2.18 \\
-OMS & 8327.6 & 2.15 \\
-NMS & 6767.5 & 2.65 \\
-OAI & 208.1 & 86.09 \\
+Min-Sum (MS)  & 8228.7 & 2.18 \\
+Offset Min-Sum (OMS) & 8327.6 & 2.15 \\
+Normalized Min-Sum (NMS) & 6767.5 & 2.65 \\
 \bottomrule
 \end{tabular}
+\end{table}
+
+The results indicate that the SPA, while delivering the most accurate decoding, incurs the highest latency due to its complex check-node computations involving nonlinear functions. The MS algorithm approximately halves the latency compared to SPA by using simplified minimum and sign computations, trading off some decoding accuracy for speed.
+
+Both OMS and NMS introduce modest computational overhead relative to MS because of the offset and normalization corrections, respectively. However, these overheads are minimal and latency remains around twice as fast as SPA. Notably, NMS achieves the best speedup (2.65× faster than SPA) among the approximated algorithms, aligning well with its balance between complexity and decoding performance observed earlier.
+
+These latency measurements reinforce the practical considerations when selecting a decoding algorithm: SPA is most suitable where decoding accuracy is critical and processing resources are plentiful; NMS provides a strong alternative offering considerably reduced latency with minimal performance loss; MS and OMS suit scenarios with stricter speed or power constraints but can tolerate slightly degraded decoding.
+
+Therefore, the presented latency and speedup data complement the BER and BLER performance results to guide algorithm choice tailored to specific application requirements.
+
+
+\section{Comparative Analysis with Existing Implementation}
+\label{sec:comparative_analysis}
+
+An important aspect of this work is the comparison between the newly implemented LDPC decoding algorithms (SPA, MS, OMS, and NMS) and the legacy decoder implementation provided by the Open Air Interface (OAI) framework.
+
+The original OAI decoder was designed primarily as a hard-decision decoder, optimized for simplicity and integration within the broader 5G software ecosystem. Its decoding process operated on binary hard decisions without exploiting soft information from the channel, limiting error correction performance in noisy environments. Additionally, the legacy implementation employed a relatively fixed decoding schedule and fewer algorithmic options.
+
+In contrast, the new implementation supports full soft-decision decoding with log-likelihood ratios (LLRs) as input, enabling more precise reliability information to be processed during decoding. This facilitates the use of advanced iterative message-passing algorithms such as SPA, OMS, and NMS, which leverage soft information to significantly improve error-correction capability.
+
+Furthermore, the modular software architecture of the new decoder allows configurable decoding schedules (layered or flooding), selection among multiple decoding algorithms, and flexible control over iteration limits and stopping criteria. This flexibility was not present in the original OAI decoder, which had a more rigid design.
+
+From a computational complexity perspective, the new implementation trades additional processing and memory requirements due to soft-decision operations and more sophisticated algorithms for considerable gains in decoding performance, especially under low signal-to-noise ratio (SNR) conditions. The original OAI decoder is more resource-efficient with its simpler hard-decision logic but exhibits suboptimal performance for demanding channel conditions.
+
+Overall, the new decoder implementation provides a comprehensive upgrade in both functionality and performance, addressing limitations observed in the OAI legacy version. By supporting multiple advanced algorithms and soft-decision inputs, it offers enhanced robustness and adaptability for future wireless communication scenarios.
+
+Experimental results in the previous chapter quantitatively demonstrate these improvements, highlighting the benefits of moving beyond hard-decision decoding to sophisticated soft-decision iterative algorithms.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/all.png}
+  \caption{Combined BLER vs.\ SNR comparison across all algorithms.}
+  \label{fig:bler-oai-combined}
+\end{figure}
+
+Table~\ref{tab:oai_latency} presents a latency comparison between the newly implemented LDPC decoding algorithms (SPA, MS, OMS, NMS) and the legacy Open Air Interface (OAI) decoder. The latency measurements are taken at the same reference signal-to-noise ratio (SNR$_\text{ref}$), with speedup values reported relative to the SPA baseline.
+
+\begin{table}[htbp]
+\centering
+\caption{Decoding Latency and Speedup Comparison with OAI Implementation}
+\label{tab:oai_latency}
+\begin{tabular}{l r r}
+\toprule
+Algorithm & Latency@SNR$_\text{ref}$ [$\mu$s] & Speedup vs SPA \\
+\midrule
+SPA & 17915.4 & 1.00 \\
+Min-Sum (MS)  & 8228.7 & 2.18 \\
+Offset Min-Sum (OMS) & 8327.6 & 2.15 \\
+Normalized Min-Sum (NMS) & 6767.5 & 2.65 \\
+OAI Legacy Decoder & 208.1 & 86.09 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At first glance, the OAI legacy decoder exhibits an extraordinary speed advantage, operating approximately 86 times faster than even the fastest newly implemented algorithm (NMS). This substantial difference arises primarily due to fundamental architectural and algorithmic distinctions:
+
+\begin{itemize}
+    \item \textbf{Hard-decision vs. Soft-decision decoding:} The OAI decoder employs hard-decision decoding, which operates on binary values without processing soft information. This allows significantly simpler computations—primarily bit-level operations such as XOR—in stark contrast to the real-valued iterative message-passing computations employed by SPA, MS, OMS, and NMS~\cite{oai, Ryan2009}.
+    
+    \item \textbf{Simplified update rules:} The legacy decoder’s iteration steps involve less complex logic, abandoning nonlinear functions and likelihood computations. This reduces both computational burden and memory requirements drastically~\cite{Larsson-Edefors2014}.
+    
+    \item \textbf{Software implementation trade-offs:} The new decoder prototypes target modularity, extensibility, and advanced decoding algorithms, incurring overheads due to flexible scheduling, soft-value processing, and algorithm selection mechanisms. In contrast, OAI’s implementation is optimized for real-time operation in constrained environments, often at the cost of decoding performance~\cite{Roth2015}.
+\end{itemize}
+
+While the OAI decoder excels in speed due to its simplicity, it inherently sacrifices error correction capability, especially at low SNR regimes where soft information and complex decoding algorithms yield substantial gains. The newly implemented soft-decision decoders deliver superior error rate performance, supporting more robust communications in challenging scenarios, albeit at higher computational cost.
+
+Thus, the performance-versus-complexity trade-off is evident: the OAI legacy decoder suits scenarios with stringent latency and resource constraints, whereas the advanced soft-decision decoders developed herein enable enhanced reliability where processing power permits.
 
 \end{document}

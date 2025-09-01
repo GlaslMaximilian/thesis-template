@@ -119,6 +119,8 @@ where $N(c)$ is the set of variable nodes connected to check node $c$, and $m_{v
 
 The Min-Sum algorithm replaces $\tanh$ operations with simple minimum and sign calculations, enabling faster implementations while slightly degrading performance due to overestimation of information~\cite{Schmalen2021, NumberAnalytics2025}.
 
+\todo{explain how the algorithm works in more detail}
+
 \subsection{Offset Min-Sum Algorithm (OMS)}
 
 OMS further refines the Min-Sum approach by introducing a correction offset $\beta$ to counteract the tendency of MS to overestimate message reliability:
@@ -127,6 +129,8 @@ OMS further refines the Min-Sum approach by introducing a correction offset $\be
 \end{equation}
 The offset parameter $\beta$ is tuned empirically to balance decoding accuracy and complexity, providing significant performance improvement relative to MS~\cite{Condo2019}.
 
+\todo{How is this better than MS?}
+
 \subsection{Normalized Min-Sum Algorithm (NMS)}
 
 NMS scales the output of the Min-Sum check node update by a normalization factor $\alpha \in [0,1]$:
@@ -134,6 +138,8 @@ NMS scales the output of the Min-Sum check node update by a normalization factor
     m_{c \to v} = \prod_{v' \in N(c) \setminus v} \mathrm{sign}(m_{v' \to c}) \cdot \alpha \cdot \min_{v' \in N(c) \setminus v} |m_{v' \to c}|
 \end{equation}
 The factor $\alpha$ is chosen to mitigate the Min-Sum’s overestimation, typically optimized for code and channel characteristics. NMS is simple to implement and achieves performance closer to SPA, especially for well-chosen $\alpha$~\cite{Schmalen2021, Condo2019}.
+
+\todo{How is this better than MS?}
 
 \subsection{Comparison and Decoding Flow}
 

@@ -11,13 +11,17 @@ This thesis presented the design and implementation of a \emph{core} LDPC decode
 Architecturally, the decoder employs iterative message passing on the Tanner graph with a layered schedule to accelerate convergence. Particular attention was paid to numerical stability in the soft domain and to a modular design of variable-node (VN) and check-node (CN) processing with compact edge message buffers.
 
 \section*{Experimental Findings}
-Performance was evaluated via Monte Carlo simulation on an AWGN channel over an $E_b/N_0$ sweep from $-6$ to $-4$~dB using BLER as the primary metric. The main observations are:
-\begin{itemize}
-  \item \textbf{SPA} achieves the best error-correction performance but has the highest computational cost.
-  \item \textbf{MS} is computationally light and fastest per iteration, but with a clear BLER penalty.
-  \item \textbf{OMS} and \textbf{NMS} strike a favorable balance: near-SPA BLER with small additional cost over MS (offset or scaling in CN updates).
-\end{itemize}
-Overall, OMS/NMS provide a pragmatic trade-off for many deployment scenarios.
+he performance of the implemented LDPC decoding algorithms was evaluated through Monte Carlo simulations over an additive white Gaussian noise (AWGN) channel, sweeping the signal-to-noise ratio \(E_b/N_0\) from \(-6\) to \(-4\) dB, as described in Section~\ref{sec:experimental_setup}. Block error rate (BLER) was used as the primary performance metric to quantify the error-correction capability of each decoding algorithm.
+
+As detailed in Section~\ref{sec:error_correction_performance}, the Sum-Product Algorithm (SPA) consistently delivers the best error-correction performance across the evaluated SNR range. However, this high accuracy comes at the cost of significantly increased computational complexity and decoding latency, as analyzed in Section~\ref{sec:decoding_speed_complexity}.
+
+In contrast, the Min-Sum (MS) algorithm offers the lowest computational burden and fastest processing per iteration due to its simplified check-node update rules. Nevertheless, this speed advantage is accompanied by a notable penalty in BLER performance, reflecting the trade-off between decoder complexity and error correction capability discussed in Section~\ref{subsec:decoding_algorithms}.
+
+The Offset Min-Sum (OMS) and Normalized Min-Sum (NMS) algorithms provide an attractive middle ground, as introduced in Section~\ref{subsec:decoding_algorithms}. By incorporating an offset correction or a normalization factor in the check-node computations, OMS and NMS approach the BLER performance of SPA while incurring only a marginal increase in complexity compared to MS. This balance makes OMS and NMS especially suitable for practical deployment scenarios where decoding accuracy and computational efficiency must be jointly optimized.
+
+In summary, the results presented throughout the thesis suggest that OMS and NMS embody a pragmatic trade-off, delivering near-optimal error correction with considerably reduced computational demands relative to SPA. This finding is consistent with theoretical expectations and practical considerations detailed in the literature and supported by the comparative analyses conducted here.
+
+\todo{fix references to sections after finalizing}
 
 \section*{Current Limitations}
 While the core decoder is functional and its behavior is well-characterized, the implementation is \emph{not yet} ready to replace the existing production decoder. Key reasons include:
