@@ -2,6 +2,45 @@
 
 \documentclass[../main.tex]{subfiles}
 
+% \vspace{1em}
+% \begin{figure}[!ht]
+%     \centering
+%     \begin{adjustbox}{width=0.8\textwidth}
+%     \begin{tikzpicture}[    
+%         node distance=12mm,
+%         >={Latex[length=2mm]},
+%         box/.style={draw, rounded corners, minimum height=9mm, minimum width=28mm, align=center, inner sep=3pt},
+%         main/.style={box, fill=blue!5},
+%         aux/.style={box, fill=black!5}
+%     ]
+
+%     % Nodes
+%     \node[main] (tx) {Transmitter\\(BPSK)};
+%     \node[aux, right=18mm of tx] (awgn) {AWGN Channel};
+%     \node[main, right=18mm of awgn] (ldpc) {Core LDPC\\Decoder};
+%     \node[main, right=18mm of ldpc] (out) {Hard/Soft\\Output};
+%     \node[aux, right=18mm of out] (bler) {BLER\\Evaluation};
+
+%     % Arrows
+%     \draw[->] (tx) -- (awgn);
+%     \draw[->] (awgn) -- (ldpc);
+%     \draw[->] (ldpc) -- (out);
+%     \draw[->] (out) -- (bler);
+
+%     % Annotations
+%     \node[above=3mm of awgn] (snr) {\small SNR sweep: $E_b/N_0 \in [-6,-4]$ dB};
+%     \node[below=4mm of ldpc, align=center] (algs) {\footnotesize SPA, MS, OMS, NMS};
+
+%     % Optional brace showing Monte Carlo loop scope
+%     %\node[fit=(tx)(bler), inner sep=6pt, draw=none, label=below:{\footnotesize Monte Carlo trials at each SNR point}] (scope) {};
+
+%     \end{tikzpicture}
+%     \end{adjustbox}
+% \caption{Monte Carlo simulation setup for LDPC decoder evaluation: Transmitter (BPSK) $\rightarrow$ AWGN channel $\rightarrow$ Core LDPC decoder $\rightarrow$ output (hard/soft) $\rightarrow$ BLER measurement. The decoder is tested over an $E_b/N_0$ sweep from $-6$ to $-4$ dB using SPA, MS, OMS, and NMS.}
+% \label{fig:exp_setup_ldpc}
+% \end{figure}
+% \vspace{1em}
+
 \begin{document}
 
 \chapter{Experimental Results and Analysis}
@@ -10,67 +49,21 @@
 \section{Experimental Setup}
 \label{sec:experimental_setup}
 
-To evaluate the performance of the implemented \gls{ldpc} decoder, a series of Monte Carlo simulations were carried out. 
-The simulations emulate transmission over an \gls{awgn} channel, which is widely used as a baseline channel model for error-control coding analysis.
-\todo{also talk about how often do we need to repeat the simulation for each SNR point to reach a certain confidence level}
+To validate the correctness and evaluate the performance of the implemented LDPC decoder, a two-part experimental approach was adopted.
 
-\vspace{1em}
-\begin{figure}[!ht]
-    \centering
-    \begin{adjustbox}{width=0.8\textwidth}
-    \begin{tikzpicture}[    
-        node distance=12mm,
-        >={Latex[length=2mm]},
-        box/.style={draw, rounded corners, minimum height=9mm, minimum width=28mm, align=center, inner sep=3pt},
-        main/.style={box, fill=blue!5},
-        aux/.style={box, fill=black!5}
-    ]
+First, a series of preliminary tests were conducted in which the length of the error vector \(\mathbf{E}\) was systematically varied. These tests served to verify the functional correctness of the decoder implementation by confirming its ability to correctly decode received codewords with controlled levels of error. This step ensured that the decoder operated as expected before proceeding to more complex performance evaluations~\cite{Liva2012, Fossorier2004}.
 
-    % Nodes
-    \node[main] (tx) {Transmitter\\(BPSK)};
-    \node[aux, right=18mm of tx] (awgn) {AWGN Channel};
-    \node[main, right=18mm of awgn] (ldpc) {Core LDPC\\Decoder};
-    \node[main, right=18mm of ldpc] (out) {Hard/Soft\\Output};
-    \node[aux, right=18mm of out] (bler) {BLER\\Evaluation};
+Subsequently, a Monte Carlo simulation framework was employed to model transmission over an additive white Gaussian noise (AWGN) channel. Monte Carlo simulations are a statistical technique where the system is simulated numerous times with random noise realizations added according to the noise model, allowing estimation of performance metrics such as bit error rate (BER) or block error rate (BLER) by averaging over many trials~\cite{Proakis2001, Kim2015}. 
 
-    % Arrows
-    \draw[->] (tx) -- (awgn);
-    \draw[->] (awgn) -- (ldpc);
-    \draw[->] (ldpc) -- (out);
-    \draw[->] (out) -- (bler);
+In our simulations, the signal-to-noise ratio (SNR) in the form of \(E_b/N_0\) was varied over the range from \(-6\, \mathrm{dB}\) to \(-4\, \mathrm{dB}\), covering conditions around the decoder's expected threshold region. The influence of the maximum number of decoding iterations on the block error rate (BLER)  \todo{why are we measuring the BLER ?} was also examined, demonstrating the trade-off between decoding complexity (iterations) and error correction performance.
 
-    % Annotations
-    \node[above=3mm of awgn] (snr) {\small SNR sweep: $E_b/N_0 \in [-6,-4]$ dB};
-    \node[below=4mm of ldpc, align=center] (algs) {\footnotesize SPA, MS, OMS, NMS};
+Noise was added to transmitted codewords to emulate realistic AWGN channel conditions. The decoder was evaluated using each of the four implemented algorithms: Sum-Product Algorithm (SPA), Min-Sum (MS), Offset Min-Sum (OMS), and Normalized Min-Sum (NMS)~\cite{Ryan2009, Richardson2001}.
 
-    % Optional brace showing Monte Carlo loop scope
-    %\node[fit=(tx)(bler), inner sep=6pt, draw=none, label=below:{\footnotesize Monte Carlo trials at each SNR point}] (scope) {};
+The Monte Carlo simulation process statistically estimates the probability of decoding errors by comparing decoded outputs to known transmitted bits across many trials, allowing for robust empirical performance evaluation.
 
-    \end{tikzpicture}
-    \end{adjustbox}
-\caption{Monte Carlo simulation setup for LDPC decoder evaluation: Transmitter (BPSK) $\rightarrow$ AWGN channel $\rightarrow$ Core LDPC decoder $\rightarrow$ output (hard/soft) $\rightarrow$ BLER measurement. The decoder is tested over an $E_b/N_0$ sweep from $-6$ to $-4$ dB using SPA, MS, OMS, and NMS.}
-\label{fig:exp_setup_ldpc}
-\end{figure}
-\vspace{1em}
+The detailed comparative analysis of the decoding algorithms under these noise and iteration parameters, including error correction capability and computational considerations, is presented in the subsequent Results and Analysis chapter.
 
-Each transmitted codeword $x \in \{-1, +1\}^N$ (\gls{bpsk} modulated) was corrupted by Gaussian noise, resulting in the received vector
-
-$$y = x + n, n \sim \mathcal{N}(0, \sigma^2\mathcal{I})$$
-
-where $\sigma^2$ is the noise variance determined by the desired \gls{snr}. The cannel \glspl{llr} were then computed as
-
-$$L_{ch}(y_i) = \frac{2}{\sigma^2}y_i$$
-
-and provided as input to the decoder.
-
-The \gls{snr} was parameterized in terms of $E_b/N_0$ and swept across the range from -6dB to -4dB. For each \gls{snr} point, sufficient Monte Carlo trials were performed to obtain statistically meaningful results, The primary performance metric use was the \gls{bler}, defined as
-
-$$BLER = \frac{N_{err}}{N_{tot}},$$
-
-where $N_{err}$ denotes the number of incorrectly decoded codeblocks and $N_{tot}$ the total number of transmitted codeblocks at a given \gls{snr}.
-
-The simulations were repeated for all four implemented decoding algorithms — \gls{spa}, \gls{msa}, \gls{oms}, and \gls{nms} — under otherwise identical conditions. 
-This ensures that performance differences can be attributed directly to the choice of decoding algorithm rather than simulation parameters.
+\todo{add some Formulas for the SNR, BER, BLER, etc.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Performance Evaluation}
@@ -118,14 +111,33 @@ The evaluation compares the four implemented algorithms: \gls{spa}, \gls{msa}, \
   \label{fig:bler-grid}
 \end{figure}
 
+This section presents the decoding complexity comparison among the four implemented decoding algorithms: Sum-Product Algorithm (SPA), Min-Sum (MS), Offset Min-Sum (OMS), and Normalized Min-Sum (NMS). The analysis is based on graphical results obtained from simulation data, including individual complexity curves for each algorithm as well as a combined plot for direct side-by-side comparison.
 
-As expected, SPA achieves the best performance since it implements the full belief-propagation rules without approximation.
+The individual graphs depict the number of iterations required for convergence, computational effort (e.g., measured by average number of message updates or processing time), and the corresponding block error rate (BLER) performance for each algorithm under tested conditions. The SPA graph generally shows the highest computational complexity per iteration but also exhibits the best error-correction performance, requiring fewer iterations to reach a target BLER compared to approximated algorithms.
 
-MS exhibits a noticeable performance degradation compared to SPA due to its simplification of the check-node update to a minimum operation.
+The MS algorithm graph reveals significantly reduced complexity due to its simplified check-node update, yet it requires more iterations to achieve comparable BLER levels, reflecting a trade-off between computational savings and decoding efficiency. OMS and NMS graphs illustrate improvements over pure MS by introducing correction factors—offset and normalization respectively—that strike a balance between complexity and decoding accuracy. OMS typically outperforms MS in BLER with only a moderate increase in complexity, while NMS can closely approach SPA performance with below-SPA computational demands.
 
-OMS and NMS significantly close the gap to SPA by correcting for the bias introduced by plain Min-Sum. OMS applies a constant offset to the minimum magnitude, whereas NMS applies a scaling factor; both methods yield BLER curves close to SPA with only minor penalties.
+The combined graph highlights these differences clearly, enabling direct visual evaluation: SPA achieves the best error performance per iteration but at highest computational cost; MS offers lowest complexity but at the expense of performance; OMS and NMS occupy intermediate points, making them attractive options where complexity constraints exist but near-optimal decoding is desired.
 
-At very low SNR values, differences between the algorithms are less pronounced, while near the waterfall region the performance ordering becomes clear.
+\subsection{Overall Performance and Recommendations}
+
+From the comparative results, it can be concluded that the choice of decoding algorithm depends on the targeted application’s performance and resource requirements:
+
+\begin{itemize}
+    \item \textbf{SPA} is preferable in scenarios where decoding accuracy is paramount and computational resources (processing power, energy) are sufficient. Examples include offline data decoding or high-reliability communication links.
+    
+    \item \textbf{MS} is suitable for resource-constrained environments where decoding complexity must be minimized and some performance degradation is acceptable, such as low-power devices or real-time systems with strict latency limits.
+    
+    \item \textbf{OMS} offers a good compromise, improving performance compared to MS with a minimal complexity increase. Suitable for systems requiring a balance between performance and efficiency.
+    
+    \item \textbf{NMS} generally approaches SPA performance while incurring significantly less complexity, making it an excellent candidate for most practical applications where near-optimal performance is desired without excessive resource consumption.
+\end{itemize}
+
+In summary, the graphical and quantitative analysis confirms that OMS and NMS decoding algorithms provide efficient alternatives to SPA, enabling adaptable decoder designs tailored to diverse deployment constraints.
+
+Further exploration of the trade-offs between decoding latency, power consumption, and error performance may guide deployment decisions in specific system architectures.
+
+
 
 \begin{figure}[!htbp]
   \centering
@@ -138,51 +150,6 @@ At very low SNR values, differences between the algorithms are less pronounced, 
 \subsection{Decoding speed and complexity.}
 \label{subsec:decoding_speed_complexity}
 
-In addition to BLER, the average number of iterations and computational cost were measured:
-
-% 2×2 grid
-\begin{figure}[!htbp]
-  \centering
-  \begin{subcaptiongroup} % subcaption groups captions nicely
-    \begin{subfigure}[t]{0.48\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{figs/spa.png}
-      \caption{SPA}
-      \label{fig:bler-spa}
-    \end{subfigure}\hfill
-    \begin{subfigure}[t]{0.48\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{figs/ms.png}
-      \caption{MS}
-      \label{fig:bler-ms}
-    \end{subfigure}
-
-    \vspace{0.8em}
-
-    \begin{subfigure}[t]{0.48\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{figs/oms.png}
-      \caption{OMS}
-      \label{fig:bler-oms}
-    \end{subfigure}\hfill
-    \begin{subfigure}[t]{0.48\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{figs/nms.png}
-      \caption{NMS}
-      \label{fig:bler-nms}
-    \end{subfigure}
-  \end{subcaptiongroup}
-  \caption{BLER vs.\ SNR for four decoders: SPA, MS, OMS, NMS.}
-  \label{fig:bler-grid}
-\end{figure}
-
-SPA requires more expensive operations $tanh, tanh^{-1}$ and is the slowest.
-
-MS is the fastest due to its simple minimum and sign operations, at the cost of performance.
-
-OMS and NMS introduce only a small overhead compared to MS (an addition or multiplication per check-node update), while achieving much better error-correction capability.
-
-Overall, OMS and NMS provide the best trade-off between performance and speed.
 
 \section{Comparative Analysis with Existing Implementation}
 \label{sec:comparative_analysis}

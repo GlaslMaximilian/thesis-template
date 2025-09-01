@@ -1,55 +1,151 @@
 \documentclass[../main.tex]{subfiles}
 
+
+
+% [1](https://en.wikipedia.org/wiki/Low-density_parity-check_code)
+% [2](https://etheses.whiterose.ac.uk/id/eprint/3880/1/Jingjing_Liu_PhD_Thesis.pdf)
+% [3](https://www.itsoc.org/sites/default/files/2021-03/laurent.schmalen@kit.edu%20-%20ESIT_20_Schmalen.pdf)
+% [4](https://xuebao.nuc.edu.cn/jmsi2021-01-02.pdf)
+% [5](https://arxiv.org/pdf/2009.08645.pdf)
+% [6](https://www.numberanalytics.com/blog/computational-complexity-ldpc-codes)
+% [7](https://www.sciencedirect.com/science/article/abs/pii/S1874490719304604)
+% [8](https://cmrr-star.ucsd.edu/static/presentations/ldpc_tutorial.pdf)
+% [9](http://www.cs.cmu.edu/afs/cs/project/pscico-guyb/realworld/www/slidesS14/ldpc-amin.pdf)
+% [10](https://arxiv.org/abs/2303.16414)
+
+
 \begin{document}
 
-\chapter{LDPC Codes: Theory and Applications}
-% Sources: 
-%       Gallager, R. G. (1962). Low-Density Parity-Check Codes. IRE Transactions on Information Theory, 8(1), 21–28. DOI:10.1109/TIT.1962.1057683
-An LDPC code is a linear block code defined by a sparse binary parity-check matrix $H \in \mathbb{F}_2^{m \times n}$, where:
+\chapter{Theory of LDPC Encoding and Decoding}
+
+\section{Introduction}
+Low-Density Parity-Check (LDPC) codes are powerful linear block codes known for their sparse parity-check matrices and capacity-approaching performance in modern error-correcting systems~\cite{Karthikeyan2020, Schmalen2021, Condo2019}.
+
+\section{LDPC Code Structure}
+
+\subsection{Parity-Check Matrix}
+An LDPC code is defined by its binary parity-check matrix $H$:
 \begin{itemize}
-    \item $n$: length of the codeword
-    \item $m$: number of parity-check equations
-    \item $\mathbb{F}_2$: the finite field with two elements {0, 1}.
+    \item Each row corresponds to a parity-check constraint.
+    \item Each column corresponds to a codeword bit.
+    \item LDPC matrices may be \emph{regular} (fixed weight per row/column) or \emph{irregular} (variable weight)~\cite{Karthikeyan2020, Schmalen2021, Liu2012}.
 \end{itemize}
 
-A vector $c \in \mathbb{F}_2^{n}$ is a valid codeword if and only if:
-$$ H \cdot c^T = 0 mod 2 $$
+\subsection{Tanner Graph Representation}
+LDPC codes can be visualized using Tanner graphs, which are bipartite structures:
+\begin{itemize}
+    \item \emph{Variable nodes}: Represent codeword bits.
+    \item \emph{Check nodes}: Represent parity-checks.
+    \item Edges connect nodes as dictated by the nonzero positions in $H$, facilitating message passing during decoding~\cite{Schmalen2021, Liu2012}.
+\end{itemize}
 
-This condition implies that every codeword lies in the null space (kernel) of $H$, over GF(2). Since $H$ has rank  $r \leq m$, the dimension of the code is $k = n - rank(H)$, and the code rate is:
-$$R = \frac{k}{n} = 1 - \frac{rank(H)}{n}$$
-
-% ########## ENCODING ##########
-% Sources:
-%       Richardson, T., & Urbanke, R. (2008). Modern Coding Theory. Cambridge University Press. (Chapter 4)
 \section{LDPC Encoding}
-\label{sec:encoding}
-While decoding is typically based on the parity-check matrix $H$, encoding is performed using a generator matrix $G \in \mathbb{F}_2^{k \times n}$, which satisfies:
-$$G \cdot H^T = 0$$
-This ensures that any message vector $u \in \mathbb{F}_2^{k}$ is mapped to a valid codeword $c \in \mathbb{F}_2^{n}$:
-$$c = u \cdot G$$
-To construct $G$ from $H$, one common approach is to transform $H$ into systematic form using Gaussian elimination:
-$$
-H = \begin{bmatrix} P & I \end{bmatrix}
-\quad \Rightarrow \quad
-G = \begin{bmatrix} I & P^T \end{bmatrix}
-$$
-This allows the parity bits to be computed from the message bits efficiently.
 
-% ########## DECODING ##########
-% Sources:
+Encoding involves generating a codeword $\mathbf{c}$ from the message $\mathbf{m}$ so that:
+\begin{equation}
+    H \cdot \mathbf{c}^T = 0
+\end{equation}
+Steps:
+\begin{enumerate}
+    \item Construct a generator matrix $G$ (often derived algorithmically from $H$).
+    \item Compute codeword: $\mathbf{c} = \mathbf{m}G$.
+\end{enumerate}
+Quasi-cyclic and lower triangular matrix structures enable efficient hardware encoding~\cite{Zhang2021, Liu2012}.
+
 \section{LDPC Decoding}
-\label{sec:decoding}
-LDPC decoding is typically performed using iterative algorithms on dhe code's Tanner graph, These algorithms aim to estimate the transmitted codeword by exploiting the sparsity of the parity-check matrix $H$ and the soft information received from the channel. 
-This section presents the mathematical formulation of the Sum-Product Algorithm (SPA), as well as its approximations: Min-Sum, Normalized Min-Sum, and Offset Min-Sum.
+
+\subsection{Hard-Decision Decoding}
+The bit-flipping algorithm repeatedly flips bits involved in unsatisfied parity-checks until no violations remain or decoding is halted~\cite{Karthikeyan2020, Schmalen2021}.
+
+\subsection{Soft-Decision Decoding}
+\textbf{Belief Propagation (BP)/Sum-Product Algorithm (SPA):}
+\begin{itemize}
+    \item Iteratively passes probability estimates between variable and check nodes.
+    \item Updates continue until convergence or a maximum number of iterations is reached~\cite{Karthikeyan2020, Condo2019}.
+\end{itemize}
+
+\textbf{Min-Sum Algorithm:} A simplified version of BP, substituting probability computations with minimum operations to reduce complexity~\cite{NumberAnalytics2025}.
+
+\subsection{Complexity and Practical Considerations}
+\begin{itemize}
+    \item Complexity is linear in code length and number of iterations thanks to matrix sparsity.
+    \item Irregular constructions can yield superior error performance at increased implementation cost~\cite{NumberAnalytics2025, Condo2019}.
+\end{itemize}
+
+\section{Application Example: Binary Erasure Channel}
+When bits are erased, decoding uses parity constraints to iteratively recover unknown bits:
+\begin{itemize}
+    \item If a parity-check equation contains only one unknown bit, it can be directly solved.
+    \item The process continues until all erasures are resolved or recovery stalls~\cite{Karthikeyan2020, Schmalen2021}.
+\end{itemize}
+
 
 % ########## DECODING ALGORITHMS ##########
 \section{Overview Decoding Algorithms}
 \label{sec:decoding_algorithms}
 
-\subfile{./4-theory/SPA.tex}
+% \subfile{./4-theory/SPA.tex}
 
-\subfile {./4-theory/MSA.tex}
+% \subfile {./4-theory/MSA.tex}
 
-\subfile{./4-theory/NMS-OMS.tex}
+% \subfile{./4-theory/NMS-OMS.tex}
+
+
+In this section, we provide a detailed theoretical explanation of the LDPC decoding algorithms that are central to this thesis: the Sum-Product Algorithm (SPA), Min-Sum Algorithm (MS), Offset Min-Sum (OMS), and Normalized Min-Sum (NMS). These algorithms are the backbone of iterative LDPC decoding in practical communication systems~\cite{Karthikeyan2020, Schmalen2021, Condo2019}.
+
+\subsection{Sum-Product Algorithm (SPA)}
+
+SPA, also known as Belief Propagation (BP), is a soft-decision iterative algorithm operating on the Tanner graph of the LDPC code. It utilizes probabilistic messages passed between variable nodes ($v$) and check nodes ($c$).
+
+\textbf{Key steps:}
+\begin{enumerate}
+    \item \textbf{Initialization:} Variable nodes are initialized with log-likelihood ratios (LLRs) from the channel.
+    \item \textbf{Message Passing:}
+        \begin{itemize}
+            \item Each variable node sends its LLR to associated check nodes.
+            \item Each check node computes a parity-consistent response based on incoming messages, often using the $\tanh$ and $\mathrm{atanh}$ functions for bipolar messages.
+        \end{itemize}
+    \item \textbf{Marginalization:} After several iterations, variable nodes aggregate incoming messages and make bit decisions.
+\end{enumerate}
+The SPA achieves near-optimal decoding for large, cycle-free graphs, but incurs significant computational complexity due to the non-linear functions in the check node updates~\cite{Karthikeyan2020, Condo2019}.
+
+\subsection{Min-Sum Algorithm (MS)}
+
+MS is a simplified approximation of SPA designed to reduce computational complexity. It modifies the check node update rule:
+\begin{equation}
+    m_{c \to v} = \prod_{v' \in N(c) \setminus v} \mathrm{sign}(m_{v' \to c}) \cdot \min_{v' \in N(c) \setminus v} |m_{v' \to c}|
+\end{equation}
+where $N(c)$ is the set of variable nodes connected to check node $c$, and $m_{v' \to c}$ are incoming messages.
+
+The Min-Sum algorithm replaces $\tanh$ operations with simple minimum and sign calculations, enabling faster implementations while slightly degrading performance due to overestimation of information~\cite{Schmalen2021, NumberAnalytics2025}.
+
+\subsection{Offset Min-Sum Algorithm (OMS)}
+
+OMS further refines the Min-Sum approach by introducing a correction offset $\beta$ to counteract the tendency of MS to overestimate message reliability:
+\begin{equation}
+    m_{c \to v} = \prod_{v' \in N(c) \setminus v} \mathrm{sign}(m_{v' \to c}) \cdot \max\left( \min_{v' \in N(c) \setminus v} |m_{v' \to c}| - \beta,\ 0 \right)
+\end{equation}
+The offset parameter $\beta$ is tuned empirically to balance decoding accuracy and complexity, providing significant performance improvement relative to MS~\cite{Condo2019}.
+
+\subsection{Normalized Min-Sum Algorithm (NMS)}
+
+NMS scales the output of the Min-Sum check node update by a normalization factor $\alpha \in [0,1]$:
+\begin{equation}
+    m_{c \to v} = \prod_{v' \in N(c) \setminus v} \mathrm{sign}(m_{v' \to c}) \cdot \alpha \cdot \min_{v' \in N(c) \setminus v} |m_{v' \to c}|
+\end{equation}
+The factor $\alpha$ is chosen to mitigate the Min-Sum’s overestimation, typically optimized for code and channel characteristics. NMS is simple to implement and achieves performance closer to SPA, especially for well-chosen $\alpha$~\cite{Schmalen2021, Condo2019}.
+
+\subsection{Comparison and Decoding Flow}
+
+All these algorithms share the same iterative message-passing structure:
+\begin{itemize}
+    \item \textbf{Initialization:} Channel LLRs are loaded.
+    \item \textbf{Iterations:} Variable and check node updates proceed based on algorithm-specific rules.
+    \item \textbf{Decision:} Final bit decisions are made from accumulated messages.
+\end{itemize}
+
+The choice of algorithm reflects a trade-off between achievable error rate performance (SPA highest, MS lowest) and computational complexity (SPA highest, MS lowest; OMS/NMS intermediate)~\cite{Schmalen2021, Condo2019}.
+
+
 
 \end{document}
